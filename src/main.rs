@@ -27,9 +27,24 @@ async fn repl_func(bot: Bot, msg: Message) -> ResponseResult<()> {
         .to_lowercase()
         .as_str()
     {
-        "/roll" => roll_handler(bot, msg).await,
-        "/start" => start_handler(bot, msg).await,
-        "/help" | _ => help_handler(bot, msg).await,
+        "/roll" => {
+            wrap_logging(|| async move {
+                roll_handler(bot, msg).await;
+            })
+            .await
+        }
+        "/start" => {
+            wrap_logging(|| async move {
+                start_handler(bot, msg).await;
+            })
+            .await
+        }
+        "/help" | _ => {
+            wrap_logging(|| async move {
+                help_handler(bot, msg).await;
+            })
+            .await
+        }
     };
 
     Ok(())

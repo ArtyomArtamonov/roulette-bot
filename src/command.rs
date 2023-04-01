@@ -8,7 +8,9 @@ where
     H: FnOnce() -> Fut,
     Fut: Future<Output = ()>,
 {
-    log::trace!("start processing command");
+    log::debug!("start processing command");
+    let start = std::time::Instant::now();
     handler().await;
-    log::trace!("end processing command");
+    let elapsed = start.elapsed();
+    log::debug!("end processing command; elapsed: {:?}", elapsed);
 }
